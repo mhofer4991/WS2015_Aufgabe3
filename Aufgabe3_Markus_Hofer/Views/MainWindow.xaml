@@ -1,0 +1,231 @@
+﻿<Window x:Class="Aufgabe3_Markus_Hofer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Aufgabe3_Markus_Hofer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </Window.Resources>
+    <Grid>
+        <!--<Button x:Name="button" Content="Start" HorizontalAlignment="Left" Margin="59,99,0,0" VerticalAlignment="Top" Width="75" Click="button_Click" />
+        <Button x:Name="button1" Content="Stop" HorizontalAlignment="Left" Margin="288,132,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click" />
+        -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="200"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Background="WhiteSmoke">
+                <Border BorderBrush="Gray" BorderThickness="0 0 1 0">
+                </Border>
+
+                <StackPanel Margin="10">
+                    <TextBlock Name="internalWindowInformation" Visibility="Hidden" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="Gray" Text="Window ID: 1" Margin="0 0 0 5"></TextBlock>
+                    <StackPanel Name="windowIDFrame" Margin="0 0 0 5">
+                        <Grid Margin="0 0 0 10">
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold"  Text="Create new window">
+                            </TextBlock>
+                        </Grid>
+                        <Grid Margin="0 0 0 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="75"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Margin="0 0 5 0" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Text="Window ID:"></TextBlock>
+                            <TextBox Grid.Column="1" Name="windowIDTextBox"></TextBox>
+                        </Grid>
+
+                        <Button Content="Set ID" Name="setIDButton" Click="SetIDButton_Click"></Button>
+                    </StackPanel>
+
+                    <StackPanel Visibility="Collapsed" Name="serverStartFrame" Margin="0 0 0 5">
+                        <Grid Margin="0 0 0 10">
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold"  Text="Start server">
+                            </TextBlock>
+                        </Grid>
+                        <Grid Margin="0 0 0 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="75"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Margin="0 0 5 0" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Text="Port:"></TextBlock>
+                            <TextBox Grid.Column="1" Name="internalPortTextBox"></TextBox>
+                        </Grid>
+
+                        <Button Content="Start" Name="startButton" Click="StartButton_Click"></Button>
+                    </StackPanel>
+
+                    <StackPanel Visibility="Collapsed" Name="serverConnectFrame">
+                        <Grid Margin="0 0 0 10">
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold"  Text="Connect to window">
+                            </TextBlock>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Margin="0 0 5 0" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Text="Address:"></TextBlock>
+                            <TextBox Grid.Column="1" Text="127.0.0.1" Name="addressTextBox"></TextBox>
+                        </Grid>
+                            
+                        <Grid Margin="0 5 0 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Margin="0 0 5 0" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="0" Text="Port:"></TextBlock>
+                            <TextBox Grid.Column="1" Name="portTextBox"></TextBox>
+                        </Grid>
+
+                        <Button Content="Connect" Name="connectButton" Click="ConnectButton_Click"></Button>
+                        <Button IsEnabled="False" Content="Connecting" Visibility="Collapsed" Name="connectingButton" Click="ConnectButton_Click"></Button>
+                    </StackPanel>
+
+                    <StackPanel Name="currentWindowFrame">
+                        <Grid Visibility="{Binding Path=IsAvailable, Converter={StaticResource BoolToVisConverter} }">
+                            <StackPanel>
+                                <Grid Margin="0 10 0 5">
+                                    <TextBlock HorizontalAlignment="Center" FontWeight="Bold"  Text="Current window">
+                                    </TextBlock>
+                                </Grid>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ID: "></TextBlock>
+                                    <TextBlock Text="{Binding Path=ID}"></TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Name="sendTextFrame" Visibility="Collapsed">
+                        <StackPanel>
+                            <Grid Margin="0 10 0 5">
+                                <TextBlock HorizontalAlignment="Center" FontWeight="Bold"  Text="Send Text">
+                                </TextBlock>
+                            </Grid>
+
+                            <TextBox Margin="0 5 0 5" Name="sendTextBox"></TextBox>
+                            <Button Visibility="{Binding Path=IsAvailable, Converter={StaticResource BoolToVisConverter} }" Name="sendToCurrentTextButton" Content="Send to current window" Click="SendToCurrentTextButton_Click"></Button>
+                            <Button Margin="0 5 0 5" Name="sendToAllTextButton" Content="Send to all" Click="SendToAllTextButton_Click"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Column="1" Background="White" >
+                <Canvas Name="networkCanvas">
+                    
+                </Canvas>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1" Background="WhiteSmoke">
+            <Border BorderBrush="Gray" BorderThickness="0 1 0 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"></ColumnDefinition>
+                        <ColumnDefinition Width="4*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <ComboBox Name="typesOfMessagesComboBox" SelectedIndex="0" SelectionChanged="TypesOfMessagesComboBox_SelectionChanged">
+                            <ComboBoxItem Content="Delivered messages"></ComboBoxItem>
+                            <ComboBoxItem Content="Sent messages"></ComboBoxItem>
+                            <ComboBoxItem Content="Forwarded messages"></ComboBoxItem>
+                            <!--<ComboBoxItem Content="Received messages"></ComboBoxItem>-->
+                        </ComboBox>
+
+                        <ListBox Grid.Row="1" Name="listOfMessages" ItemsSource="{Binding}" SelectionChanged="ListOfMessages_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding DisplayText}"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+
+                    <Grid Margin="0" Grid.Column="1">
+                        <TabControl x:Name="messageDetailsTabControl">
+                            <TabItem Header="Details">
+                                <StackPanel>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <TextBlock Text="Message ID:" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding ID}" TextWrapping="Wrap"></TextBlock>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <TextBlock Text="Sender ID:" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding SenderID}" TextWrapping="Wrap"></TextBlock>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <TextBlock Text="Source ID:" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding SourceID}" TextWrapping="Wrap"></TextBlock>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80"></ColumnDefinition>
+                                            <ColumnDefinition Width="20"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <TextBlock Text="Target ID:" HorizontalAlignment="Right"></TextBlock>
+                                        <TextBlock Grid.Column="2" Text="{Binding TargetID}" TextWrapping="Wrap"></TextBlock>
+                                    </Grid>
+                                </StackPanel>
+                            </TabItem>
+                            <TabItem Header="Content">
+                                <Grid Margin="5">
+                                    <TextBlock Text="{Binding Content}"></TextBlock>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
